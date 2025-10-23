@@ -45,21 +45,21 @@ const whitelist = [
   'http://localhost:5173',
   'http://localhost:5174',
   process.env.CLIENT_URL
-];
+].filter(Boolean);
 
 const corsOptions = {
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.error("❌ Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: false, // ❌ not using cookies
-    allowedHeaders: ["Content-Type", "Authorization", "token"], // ✅ allow your custom header
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  };
+  origin: (origin, callback) => {
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error("❌ Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: false, // since you're using header-based JWT (not cookies)
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "4mb" }));
