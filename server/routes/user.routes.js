@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { checkAuth, login, signUp, updateProfile } from "../controller/user.controller.js";
+import { protectRoute } from "../middleware/auth.js";
+
+const userRouter = Router()
+
+userRouter.post('/signup',signUp)
+userRouter.post('/login',login)
+userRouter.put('/update-profile',protectRoute, updateProfile)
+userRouter.get('/check',protectRoute,checkAuth)
+
+export default userRouter
