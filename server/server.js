@@ -45,21 +45,21 @@ const whitelist = [
   'http://localhost:5173',
   'http://localhost:5174',
   process.env.CLIENT_URL
-].filter(Boolean);
+];
 
 const corsOptions = {
-  origin: function(origin, callback) {
-    // Allow requests with no origin (Postman, server-to-server)
-    if (!origin) return callback(null, true);
-
-    if (whitelist.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true // allow cookies/auth headers
-};
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.error("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: false, // ❌ not using cookies
+    allowedHeaders: ["Content-Type", "Authorization", "token"], // ✅ allow your custom header
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  };
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "4mb" }));
