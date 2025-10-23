@@ -1,5 +1,5 @@
 import { generateToken } from "../lib/utils.js"
-import User from "../model/user.js"
+import User from "../model/User.js"
 import bcrypt from 'bcrypt'
 import cloudinary from "../lib/cloudinary.js"
 
